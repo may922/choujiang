@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/choujiang.css">
+</head>
+<body>
+<div class="native">
+<span>抽奖项目</span>
+</div>
+<div class="left">
+    <ul>
+        <li><a href="#register_menu">用户注册</a></li>
+        <li><a href="#login_menu">用户登录</a></li>
+        <li><a href="#add_menu">添加奖品</a></li>
+        <li><a href="#draw_menu">抽奖</a></li>
+        <li><a href="#history_menu">查看中奖记录</a></li>
+        <li><a href="#all_menu">查看所有奖品信息</a></li>
+    </ul>
+</div>
+<div class="right">
+    <div class="form" id="register_menu">
+        <div class="menu">
+            <h4>用户注册</h4>
+        </div>
+        <form id="register_form">
+            <div id="register_name">
+                <label>用户名:</label>
+                <input type="text" name="username" placeholder="请输入用户名" class="username">
+                <span id="msg_register_username"></span>
+            </div>
+            <div id="register_pwd">
+                <label>密码:</label>
+                <input type="password" name="pwd" placeholder="请设置密码" class="password" >
+                <span id="msg_register_pwd"></span>
+            </div>
+            <div id="register_cpwd">
+                <label>确认密码:</label>
+                <input type="password" name="cpwd" placeholder="请再次输入密码" class="cpassword">
+                <span id="msg_register_cpwd"></span>
+            </div>
+            <div id="register_button">
+                <input type="button" value="注册" class="button" id="register">
+            </div>
+        </form>
+    </div>
+    <div class="form" id="login_menu">
+        <div class="menu">
+            <h4>用户登录</h4>
+        </div>
+        <form id="login_form">
+            <div id="user">
+                <label>用户名:</label>
+                <input type="text" id="username" name="username" placeholder="请输入用户名">
+            </div>
+            <div id="pwd">
+                <label>密 码:</label>
+                <input type="text" id="password" name="passwd" placeholder="请输入密码">
+            </div>
+            <div id="login_button">
+                <input type="button" id="loginBtn" value="登录" class="button">
+            </div>
+        </form>
+    </div>
+    <div class="form" id="add_menu">
+        <div class="menu"><h4>添加奖品</h4></div>
+        <form id="add" enctype="multipart/form-data">
+            <div>
+                <label>用户 ID:</label>
+                <input type="text" placeholder="请输入用户 id" name="userid" class="add_prize">
+            </div>
+            <div>
+                <label>签名:</label>
+                <input type="text" placeholder="请输入登录后获取的签名" name="sign" class="add_prize">
+            </div>
+            <div>
+                <label>奖品名称:</label>
+                <input type="text" placeholder="请输入奖品名称" name="name" class="add_prize">
+            </div>
+            <div>
+                <label>上传图片:</label>
+                <input type="file" name="file" class="add_prize">
+            </div>
+            <div>
+                <input type="button" class="button" value="添加" id="add_btn">
+                <input type="button" class="button" value="重置" id="reset_prize_btn">
+            </div>
+
+        </form>
+    </div>
+    <div class="form" id="draw_menu">
+        <div class="menu"><h4>抽奖</h4></div>
+        <form id="draw_form">
+            <div>
+                <label>用户 ID:</label>
+                <input type="text" placeholder="请输入用户 id" name="userid" class="draw_prize">
+            </div>
+            <div>
+                <label>签名:</label>
+                <input type="text" placeholder="请输入登录后获取的签名" name="sign" class="draw_prize">
+            </div>
+            <div id="draw_button">
+                <input type="button" class="button" value="抽奖" id="draw_btn">
+                <input type="button" class="button" value="重置" id="reset_draw_btn">
+            </div>
+        </form>
+    </div>
+    <div class="form" id="history_menu">
+        <div class="menu"><h4>查看中奖记录</h4></div>
+        <form id="history">
+            <div>
+                <label>用户 ID:</label>
+                <input type="text" placeholder="请输入用户 id" name="userId">
+            </div>
+            <div>
+                <label>签名:</label>
+                <input type="text" placeholder="请输入登录后获取的签名" name="sign">
+            </div>
+            <div>
+                <input type="button" class="button" value="查询">
+                <input type="button" class="button" value="重置">
+            </div>
+        </form>
+    </div>
+    <div class="form" id="all_menu">
+        <div class="menu"><h4>查看所有奖品信息</h4></div>
+        <form id="all">
+            <input type="button" value="查询" class="button">
+        </form>
+    </div>
+
+</div>
+
+ <div>
+     <button id="return_top" class="return">返回顶部</button>
+ </div>
+<!--// 引入 jquery 库-->
+<script src="js/jquery-1.11.1.min.js"></script>
+<script>
+
+    return_top.onclick = function () {
+        document.body.scrollTop = document.documentElement.scrollTop=0;
+    };
+
+    var baseUrl = "http://api.nnzhp.cn/api";
+    $(document).ready(function () {
+        $('.username').blur(function () {
+            if($(this).val() == ''){
+                // $(this).css('borderColor', 'red');
+                $('#msg_register_username').html('<font color="red">用户名不能为空!</font>')
+            }else{
+
+                $('#msg_register_username').html("")
+            }
+        });
+        $('.password').blur(function () {
+            if($(this).val()==''){
+                $(this).css('borderColor', 'red');
+                $('#msg_register_pwd').html('<font color="red">密码不能为空！</font>')
+            }
+        });
+
+    });
+    //function verifyUserName(){
+    //     var username = $('.username').val();
+    //     if(username==''){
+    //         $('.username').css('color', 'red');
+    //     }
+   // }
+
+    register.onclick = function () {
+
+        $.ajax({
+            url: baseUrl + '/user/user_reg',
+            method: 'POST',
+            data: $('#register_form').serialize(),
+            success: function (data) {
+                console.log(data);
+                if(data.error_code==0){
+                    var msg = data.msg;
+                    var msg_str = '<div>msg:' + msg + '</div>';
+                    var register_button = document.getElementById('register');
+                    register_button.insertAdjacentHTML("afterend", msg_str);
+                }else{
+                    alert(data.msg);
+                }
+
+            },
+            error: function () {
+                alert('提交失败')
+            }
+        })
+    };
+
+    loginBtn.onclick=function () {
+        $.ajax({
+            url: baseUrl + '/user/login',
+            method: 'POST',
+            data: $('#login_form').serialize(),
+            success: function (data) {
+                if(data.error_code==0){
+                    var userId = data.login_info.userId;
+                    var sign = data.login_info.sign;
+                    var login_str = '<div>userId:' + userId + '</div><div>sign:' + sign +'</div>';
+                    var login_btn = document.getElementById('loginBtn');
+                    login_btn.insertAdjacentHTML("afterend", login_str);
+                }else{
+                    alert(data.msg)
+                }
+
+            },
+            error: function(){
+                alert('发生了一些不好的事情')
+            }
+        })
+
+    };
+
+    add_btn.onclick=function(){
+        // 文件上传
+        var form = new FormData(document.getElementById('add'));
+        console.log(form);
+        $.ajax({
+            url: baseUrl + '/product/add',
+            method: 'POST',
+            data: form,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log(data);
+                alert(data.msg);
+            }
+        })
+    };
+
+    reset_prize_btn.onclick=function () {
+        $('.add_prize').val('');
+    };
+
+    reset_draw_btn.onclick=function(){
+      $('.draw_prize').val('');
+      var draw_form = document.getElementById('draw_form');
+      var draw_info = document.getElementById('drawinfo');
+      draw_form.removeChild(draw_info); // 移除子标签
+
+    };
+
+    draw_btn.onclick=function () {
+        //var data = new FormData(document.getElementById('draw_form'));
+        $.ajax({
+            url: baseUrl + '/product/choice',
+            method:'GET',
+            data: $('#draw_form').serialize(),
+            success: function (data) {
+                if(data.error_code==0){
+                    var product_name = data.product_info.product_name;
+                    var count = data.product_info.count;
+                    var img = data.product_info.imgUrl;
+
+                    var product_str = '<div id="drawinfo"><div>奖品名称：'+product_name+'</div><div>奖品数量：'+count+'</div>奖品图片：<img src='+ img+'></div>';
+                    var draw_btn = document.getElementById('draw_button');
+                    draw_btn.insertAdjacentHTML('afterend', product_str);
+
+                }else{
+                    alert(data.msg)
+                }
+
+            },
+            error: function () {
+                alert('发生了一些不好的事情')
+
+            }
+        })
+
+    }
+
+    // var button = document.getElementById('button');
+    // button.onclick = function () {
+    //     // jQuery 提供的获取 form 表单数据的快捷方式。通过 id 定位到 form 表单，
+    //     // 然后通过 form 内标签的 name 属性获取数据
+    //     var params = $("#login").serialize();
+    //     console.log(params);
+    //     $.ajax({
+    //         //请求地址
+    //         url: "http://api.nnzhp.cn/api/user/login",
+    //         //请求方式
+    //         method: "POST",
+    //         //请求数据
+    //         data: params,
+    //         //当接口请求成功调用，并接受返回值到 data
+    //         success: function (data) {
+    //
+    //             console.log(data)
+    //
+    //             if (data.error_code == 0) {
+    //                 var sign = data.login_info.sign;
+    //                 var userId = data.login_info.userId;
+    //
+    //                 var login_div = document.getElementById('login_button');
+    //                 var new_div = '<div><span>{{sign}}</span></div><div><span>{{userId}}</span></div>';
+    //
+    //                 login_div.insertAdjacentHTML("afterend", new_div)
+    //
+    //             } else {
+    //                 alert(data.msg)
+    //             }
+    //         }
+    //     })
+    // }
+
+
+</script>
+
+</body>
+</html>
